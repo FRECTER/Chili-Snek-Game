@@ -9,7 +9,7 @@ public:
 	float Mark() {
 		const auto old = last;
 		last = std::chrono::steady_clock::now();
-		std::chrono::steady_clock::duration duration = last - old;
+		std::chrono::duration<float> duration = last - old;
 		return duration.count();
 	}
 private:
