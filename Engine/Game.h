@@ -26,6 +26,7 @@
 #include "Board.h"
 #include "Snake.h"
 #include "Goal.h"
+#include "FrameTimer.h"
 #include <random>
 
 class Game
@@ -52,10 +53,12 @@ private:
 	std::random_device rd;
 	std::mt19937 rng;
 	Goal goal;
-	static constexpr int speedIncreasePer = 10;
-	static constexpr int in_perFrame = 10;
-	int perFrame = in_perFrame;
-	int frameCount = 0;
+	FrameTimer ft;
+	static constexpr float speedIncreaseFactor = 0.005f;
+	static constexpr float min_movePeriod = 0.05f;
+	static constexpr float in_movePeriod = 0.25f;
+	float movePeriod = in_movePeriod;
+	float timeCount = 0.0f;
 	int eatenNum = 0;
 	bool inhibitPress = false;
 	bool gameStarted = false;

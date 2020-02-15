@@ -41,6 +41,7 @@ void Game::Go()
 }
 
 void Game::UpdateModel() {
+	const float dt = ft.Mark();
 	if (!gameStarted) {
 		if (wnd.kbd.KeyIsPressed(VK_RETURN))
 			gameStarted = true;
@@ -64,12 +65,12 @@ void Game::UpdateModel() {
 				inhibitPress = true;
 			}
 
-			frameCount++;
-			if (frameCount >= perFrame) {
-				frameCount = 0;
+			timeCount += dt;
+			if (timeCount >= movePeriod) {
+				timeCount -= movePeriod;
 				inhibitPress = false;
-				if (perFrame > 3)
-					perFrame = in_perFrame - snake.GetLength() / speedIncreasePer;
+				if (movePeriod > min_movePeriod)
+					movePeriod = in_movePeriod - (float)snake.GetLength() * speedIncreaseFactor;
 				Location next = snake.NextHeadLocation(d_loc);
 				if (!board.Inside(next) || snake.InTileNOHEAD(next))
 					gameEnded = true;
