@@ -33,10 +33,10 @@ bool Board::Inside(const Location& loc) const {
 }
 
 bool Board::CheckObs(const Location& loc) const {
-	return haveObs[loc.y * height + loc.x];
+	return haveObs[loc.y * width + loc.x];
 }
 
-void Board::SpawnObs(std::mt19937& rng, const Location& loc, const Snake& snake, const Goal& goal) {
+void Board::SpawnObs(std::mt19937& rng, const Snake& snake, const Goal& goal) {
 	std::uniform_int_distribution<int> XDist(0, width - 1);
 	std::uniform_int_distribution<int> YDist(0, height - 1);
 	Location newLoc;
@@ -44,5 +44,14 @@ void Board::SpawnObs(std::mt19937& rng, const Location& loc, const Snake& snake,
 		newLoc.x = XDist(rng);
 		newLoc.y = YDist(rng);
 	} while (snake.InTile(newLoc) || CheckObs(newLoc) || goal.getLocation() == newLoc);
-	haveObs[newLoc.y * height + newLoc.x] = true;
+	haveObs[newLoc.y * width + newLoc.x] = true;
+}
+
+void Board::DrawObs() {
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			if (CheckObs({ i,j }))
+				DrawCell({ i,j }, obsColor);
+		}
+	}
 }

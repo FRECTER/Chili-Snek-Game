@@ -12,6 +12,9 @@ public:
 		std::chrono::duration<float> duration = last - old;
 		return duration.count();
 	}
+	std::chrono::steady_clock::time_point GetTimeStamp() {
+		return last;
+	}
 private:
 	std::chrono::steady_clock::time_point last;
 };

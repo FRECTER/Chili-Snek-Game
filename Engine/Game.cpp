@@ -72,13 +72,14 @@ void Game::UpdateModel() {
 				if (movePeriod > min_movePeriod)
 					movePeriod = in_movePeriod - (float)snake.GetLength() * speedIncreaseFactor;
 				Location next = snake.NextHeadLocation(d_loc);
-				if (!board.Inside(next) || snake.InTileNOHEAD(next))
+				if (!board.Inside(next) || snake.InTileNOHEAD(next) || board.CheckObs(next))
 					gameEnded = true;
 				else {
 					const bool eaten = next == goal.getLocation();
 					if (eaten) {
 						snake.Grow();
 						eatenNum++;
+						board.SpawnObs(rng, snake, goal);
 					}
 					snake.MoveBy(d_loc);
 					if (eaten)
@@ -115,6 +116,7 @@ void Game::ComposeFrame() {
 		}
 		snake.Draw(board);
 		goal.Draw(board);
+		board.DrawObs();
 		if (gameEnded)
 			SpriteCodex::DrawGameOver(350, 250, gfx);
 	}
