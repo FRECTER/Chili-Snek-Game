@@ -72,7 +72,7 @@ void Game::UpdateModel() {
 				timeCount -= movePeriod;
 				inhibitPress = false;
 				if (movePeriod > min_movePeriod)
-					movePeriod = in_movePeriod - (float)snake.GetLength() * speedIncreaseFactor;
+					movePeriod = in_movePeriod - (float)snake.GetLength() * speedIncreaseFactor - poisonSpeedPer * poisonSpeedIncrease;
 				Location next = snake.NextHeadLocation(d_loc);
 				if (!board.Inside(next) || snake.InTileNOHEAD(next) || board.CheckObs(next))
 					gameEnded = true;
@@ -84,7 +84,7 @@ void Game::UpdateModel() {
 						board.SpawnObs(rng, snake, goal);
 					}
 					if (board.CheckPoison(next)) {
-						speedIncreaseFactor += 0.001f;
+						poisonSpeedIncrease += 0.001f;
 						board.ConsumePoison(next);
 					}
 					snake.MoveBy(d_loc);
