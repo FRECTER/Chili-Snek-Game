@@ -43,7 +43,7 @@ void Board::SpawnObs(std::mt19937& rng, const Snake& snake, const Goal& goal) {
 	do {
 		newLoc.x = XDist(rng);
 		newLoc.y = YDist(rng);
-	} while (snake.InTile(newLoc) || CheckObs(newLoc) || goal.getLocation() == newLoc);
+	} while (snake.InTile(newLoc) || CheckObs(newLoc) || goal.getLocation() == newLoc || CheckPoison(newLoc));
 	haveObs[newLoc.y * width + newLoc.x] = true;
 }
 
@@ -54,4 +54,32 @@ void Board::DrawObs() {
 				DrawCell({ i,j }, obsColor);
 		}
 	}
+}
+
+void Board::InitPoison() {
+	std::random_device rd;
+	std::mt19937 rng(rd());
+	std::uniform_int_distribution<int> boolDist(0, poisonRatio);
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			poison[j * width + i] = !boolDist(rng);
+		}
+	}
+}
+
+bool Board::CheckPoison(const Location& loc) const {
+	return poison[loc.y * width + loc.x];
+}
+
+void Board::DrawPoison() {
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			if (CheckPoison({ i,j }))
+				DrawCell({ i,j }, PoisonColor);
+		}
+	}
+}
+
+void Board::ConsumePoison(const Location& loc) {
+	poison[loc.y * width + loc.x] = false;
 }

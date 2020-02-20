@@ -30,7 +30,9 @@ Game::Game(MainWindow& wnd)
 	rng(rd()),
 	snake({ board.GetWidth() / 2,board.GetHeight() / 2 }),
 	goal(rng, board, snake)
-{}
+{
+	board.InitPoison();
+}
 
 void Game::Go()
 {
@@ -81,6 +83,10 @@ void Game::UpdateModel() {
 						eatenNum++;
 						board.SpawnObs(rng, snake, goal);
 					}
+					if (board.CheckPoison(next)) {
+						speedIncreaseFactor += 0.001f;
+						board.ConsumePoison(next);
+					}
 					snake.MoveBy(d_loc);
 					if (eaten)
 						goal.Respawn(rng, board, snake);
@@ -114,6 +120,9 @@ void Game::ComposeFrame() {
 			gfx.PutPixel((Graphics::ScreenWidth + board.GetWidth() * board.GetDim()) / 2 + 6, j + (Graphics::ScreenHeight - board.GetHeight() * board.GetDim()) / 2, Colors::White);
 			gfx.PutPixel((Graphics::ScreenWidth + board.GetWidth() * board.GetDim()) / 2 + 7, j + (Graphics::ScreenHeight - board.GetHeight() * board.GetDim()) / 2, Colors::White);
 		}
+		// drawing border
+		
+		board.DrawPoison();
 		snake.Draw(board);
 		goal.Draw(board);
 		board.DrawObs();

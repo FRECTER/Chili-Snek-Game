@@ -54,8 +54,8 @@ private:
 	std::mt19937 rng;
 	Goal goal;
 	FrameTimer ft;
-	static constexpr float speedIncreaseFactor = 0.005f;
-	static constexpr float min_movePeriod = 0.05f;
+	float speedIncreaseFactor = 0.005f;
+	static constexpr float min_movePeriod = 0.005f;
 	static constexpr float in_movePeriod = 0.25f;
 	float movePeriod = in_movePeriod;
 	float timeCount = 0.0f;
